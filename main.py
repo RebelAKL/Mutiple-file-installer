@@ -15,12 +15,16 @@ def select_files():
     files = filedialog.askopenfilenames(filetypes=[("Executable files", "*.exe")])
     if files:
         for file in files:
-            listbox.insert(tk.END, os.path.basename(file))
+            listbox.insert(tk.END, (os.path.basename(file), tk.Checkbutton(listbox, variable=tk.BooleanVar())))
 
 def start_installation():
-    files = [listbox.get(i) for i in listbox.curselection()]
-    if files:
-        install_files(files)
+    files_to_install = []
+    for i in range(listbox.size()):
+        file_name, checkbox = listbox.item(i)
+        if checkbox.get():
+            files_to_install.append(file_name)
+    if files_to_install:
+        install_files(files_to_install)
 
 # Create the main window
 root = tk.Tk()
